@@ -60,17 +60,55 @@ It is intentionally sanitized:
 
 ## Quick start
 
-1. Start Chrome with remote debugging enabled.
-   - Example: `Google Chrome --remote-debugging-port=9222`
-2. Log into X/Twitter in that browser and keep the home timeline tab open.
-3. Copy `config.example.yaml` to `config.yaml` and fill in your CDP target and GraphQL query IDs.
-4. Export required secrets:
-   - `export TWITTER_BEARER_TOKEN='...'`
-   - `export OPENAI_API_KEY='...'` or `export ANTHROPIC_API_KEY='...'`
-5. Run:
-   - `python3 scripts/health_check.py --config config.yaml`
-   - `python3 scripts/run_fetch.py --config config.yaml`
-   - `python3 scripts/run_digest.py --config config.yaml`
+1. **Start Chrome with remote debugging:**
+   ```bash
+   # macOS
+   /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
+
+   # Linux
+   google-chrome --remote-debugging-port=9222
+
+   # Windows
+   chrome.exe --remote-debugging-port=9222
+   ```
+
+2. **Log into X/Twitter** in that browser and navigate to `https://x.com/home`.
+
+3. **Find your CDP target ID:**
+   ```bash
+   curl http://localhost:9222/json/list
+   ```
+   Look for the entry whose `url` contains `x.com/home`. Copy the `id` field (e.g. `"id": "ABC123..."`).
+
+4. **Find your GraphQL query IDs and bearer token:**
+   - Open Chrome DevTools → Network tab → filter by `graphql`
+   - Refresh or scroll your timeline
+   - Look for requests to `HomeLatestTimeline` (Following) and `HomeTimeline` (For You)
+   - The URL looks like: `https://x.com/i/api/graphql/QUERY_ID/HomeLatestTimeline?variables=...`
+   - Copy the `QUERY_ID` part from both URLs
+   - In the same request, check the `Authorization` header — it contains `Bearer AAAAAA...` — that's your bearer token
+
+5. **Set up the project:**
+   ```bash
+   git clone https://github.com/x342344-bot/twitter-timeline-digest.git
+   cd twitter-timeline-digest
+   pip install -r requirements.txt
+   cp config.example.yaml config.yaml
+   ```
+   Fill in `config.yaml` with your `target_id`, both `query_id` values.
+
+6. **Export secrets:**
+   ```bash
+   export TWITTER_BEARER_TOKEN='AAAAAAAAAAAAAAAAAAAAANRILg...'
+   export OPENAI_API_KEY='sk-...'   # or ANTHROPIC_API_KEY
+   ```
+
+7. **Run:**
+   ```bash
+   python3 scripts/health_check.py --config config.yaml   # verify setup
+   python3 scripts/run_fetch.py --config config.yaml       # fetch timeline
+   python3 scripts/run_digest.py --config config.yaml      # generate digest
+   ```
 
 ## Configuration
 

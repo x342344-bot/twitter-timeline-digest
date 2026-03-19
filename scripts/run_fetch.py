@@ -5,7 +5,11 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 from pathlib import Path
+
+# Ensure project root is on sys.path so `src` is importable
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.fetch_timeline import run_fetch
 
