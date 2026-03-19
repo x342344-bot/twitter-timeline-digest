@@ -65,7 +65,7 @@ It is intentionally sanitized:
 2. Log into X/Twitter in that browser and keep the home timeline tab open.
 3. Copy `config.example.yaml` to `config.yaml` and fill in your CDP target and GraphQL query IDs.
 4. Export required secrets:
-   - `export TWITTER_BEARER_TOKEN='...'
+   - `export TWITTER_BEARER_TOKEN='...'`
    - `export OPENAI_API_KEY='...'` or `export ANTHROPIC_API_KEY='...'`
 5. Run:
    - `python3 scripts/health_check.py --config config.yaml`
@@ -161,6 +161,35 @@ This project avoids shipping hardcoded private data, so you must provide your ow
 - current GraphQL query IDs for Following and For You
 
 X/Twitter rotates query ids and sometimes changes response shapes. Expect light maintenance.
+
+## Output
+
+The project only writes JSON and prints summaries to stdout.
+
+If you want delivery, add it in your own wrapper:
+
+- cron job
+- webhook
+- email
+- Slack
+- anything else
+
+Keeping delivery out of the core repo makes the open-source version safer and more portable.
+
+## Contributing
+
+PRs are welcome for:
+
+- response-shape fixes when X/Twitter changes
+- better event dedup logic
+- lower-cost scoring heuristics
+- provider adapters beyond OpenAI / Anthropic
+- documentation and example configs
+
+## License
+
+MIT
+t maintenance.
 
 ## Output
 

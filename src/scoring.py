@@ -12,7 +12,24 @@ PAYMENT_WALLET_RE = re.compile(r"wallet|payment|payments|stablecoin|usdc|usdt|st
 COMPLIANCE_RE = re.compile(r"sec|cftc|compliance|kyc|aml|license|tax|regulation", re.I)
 SECURITY_RE = re.compile(r"hack|hacked|exploit|breach|attack|drain|stolen|phishing", re.I)
 CASHTAG_RE = re.compile(r"\$([A-Z]{2,10})\b")
-COMMON_STOCKS = {"AAPL", "MSFT", "NVDA", "TSLA", "META", "AMZN", "SPY", "QQQ", "USD"}
+COMMON_STOCKS = {
+    # Mega caps
+    "AAPL", "MSFT", "NVDA", "TSLA", "META", "AMZN", "GOOG", "GOOGL",
+    # Finance
+    "JPM", "V", "MA", "BAC", "WFC", "GS", "MS",
+    # Indices / ETFs
+    "SPY", "QQQ", "DIA", "IWM", "VTI",
+    # Semis
+    "ASML", "TSM", "SMCI", "AVGO", "MU", "QCOM", "ARM", "AMD", "INTC",
+    # Tech
+    "CRM", "ORCL", "ADBE", "NOW", "SNOW", "DDOG",
+    # Cyber
+    "PANW", "CRWD", "ZS", "NET",
+    # Other common
+    "USD", "GDP", "CPI", "PPI", "FOMC", "FED",
+    # Misc large cap
+    "DELL", "PLTR", "UBER", "ABNB", "COIN",
+}
 
 
 def tweet_text(tweet: dict[str, Any]) -> str:

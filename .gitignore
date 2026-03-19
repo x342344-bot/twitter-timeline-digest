@@ -5,6 +5,7 @@ venv/
 config.yaml
 .env
 .env.*
+!.env.example
 data/*.json
 logs/*.log
 .DS_Store

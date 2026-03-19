@@ -36,26 +36,24 @@ def build_payload(tweets: list[dict[str, Any]], buzz: list[dict[str, Any]], *, l
 
 
 def call_openai(api_key: str, model: str, prompt: str, payload: list[dict[str, Any]]) -> dict[str, Any]:
-    """Call the OpenAI Responses API and parse JSON output."""
+    """Call the OpenAI Chat Completions API and parse JSON output."""
     response = requests.post(
-        "https://api.openai.com/v1/responses",
+        "https://api.openai.com/v1/chat/completions",
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
         json={
             "model": model,
-            "input": [
-                {"role": "system", "content": [{"type": "input_text", "text": prompt}]},
-                {"role": "user", "content": [{"type": "input_text", "text": json.dumps(payload, ensure_ascii=False)}]},
+            "messages": [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
             ],
-            "text": {"format": {"type": "json_object"}},
+            "response_format": {"type": "json_object"},
         },
         timeout=90,
     )
     response.raise_for_status()
     data = response.json()
-    output_text = data.get("output", [{}])[0].get("content", [{}])[0].get("text")
-    if not output_text:
-        raise ValueError("OpenAI returned no text payload")
-    return json.loads(output_text)
+    text = data["choices"][0]["message"]["content"]
+    return json.loads(text)
 
 
 def call_anthropic(api_key: str, model: str, prompt: str, payload: list[dict[str, Any]]) -> dict[str, Any]:

@@ -240,6 +240,21 @@ def run_fetch(config_path: Path) -> dict[str, Any]:
     finally:
         ws.close()
     raw = following + for_you
+    # Cross-feed dedup: if same tweet appears in both feeds, keep the "following" version
+    seen_ids: set[str] = set()
+    deduped: list[dict[str, Any]] = []
+    # Following first so it takes priority
+    for tweet in following:
+        tid = str(tweet.get("id") or "")
+        if tid and tid not in seen_ids:
+            seen_ids.add(tid)
+            deduped.append(tweet)
+    for tweet in for_you:
+        tid = str(tweet.get("id") or "")
+        if tid and tid not in seen_ids:
+            seen_ids.add(tid)
+            deduped.append(tweet)
+    raw = deduped
     candidates = filter_candidates(raw, config)
     cleanup_old_files(data_dir, retention_days=int(config["storage"]["retention_days"]))
     raw_total = save_raw_tweets(data_dir, raw)
