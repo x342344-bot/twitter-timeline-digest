@@ -1,0 +1,116 @@
+cdp:
+  host: 127.0.0.1
+  port: 9222
+  target_id: "YOUR_TAB_TARGET_ID"
+
+twitter:
+  bearer_token_env: TWITTER_BEARER_TOKEN
+  graphql:
+    following_query_id: "HomeLatestTimeline_QUERY_ID"
+    following_operation: "HomeLatestTimeline"
+    for_you_query_id: "HomeTimeline_QUERY_ID"
+    for_you_operation: "HomeTimeline"
+  for_you_scroll_rounds: 5
+  page_size: 40
+
+storage:
+  data_dir: ./data
+  retention_days: 7
+  dedup_window_days: 3
+
+filters:
+  engagement:
+    high_likes: 500
+    high_retweets: 100
+    follower_floor: 500000
+    soft_likes_with_ticker: 50
+    soft_likes_with_followers: 30
+    soft_followers: 5000
+  keywords:
+    must:
+      - bitcoin
+      - btc
+      - ethereum
+      - eth
+      - solana
+      - defi
+      - nft
+      - airdrop
+      - stablecoin
+      - sec
+      - hack
+      - exploit
+      - etf
+      - layer 2
+      - rollup
+      - rwa
+      - funding round
+      - token launch
+    interest:
+      - onchain
+      - staking
+      - yield
+      - liquidity
+      - launchpool
+      - wallet
+      - mcp
+      - ai agent
+      - prediction market
+      - points program
+      - bridge
+      - perp
+      - whale
+      - smart money
+      - narrative
+  big_accounts:
+    - vitalikbuterin
+    - cz_binance
+    - elonmusk
+    - coinbase
+    - a16zcrypto
+    - solana
+    - uniswap
+    - aave
+    - sassal0x
+    - haydenzadams
+    - ilblackdragon
+    - santiago_santos
+    - defillama
+    - base
+    - anthropicai
+  institutional_accounts:
+    - binance
+    - coinbase
+    - aave
+    - uniswap
+    - blackrock
+    - grayscale
+    - layerzero_core
+    - chainlink
+    - ethena_labs
+    - jupiterexchange
+
+scoring:
+  crypto_boost: 5.0
+  alpha_boost: 3.0
+  for_you_boost: 2.0
+  institutional_floor: 200
+  selective_boosts:
+    etf_flow: 2.0
+    payment_wallet: 1.8
+    compliance: 1.8
+    security: 2.2
+
+buzz:
+  min_authors: 3
+
+digest:
+  provider: openai
+  model: gpt-4.1-mini
+  prompt_path: ./prompts/digest.md
+  output_count: 25
+  api_key_env: OPENAI_API_KEY
+  anthropic_api_key_env: ANTHROPIC_API_KEY
+
+output:
+  webhook_url: ""
