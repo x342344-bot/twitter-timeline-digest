@@ -8,3 +8,4 @@ config.yaml
 data/*.json
 logs/*.log
 .DS_Store
+__pycache__/
