@@ -149,7 +149,14 @@ def build_fetch_js(config: dict[str, Any], feed: str, *, cursor: str | None = No
 
 
 def build_set_bearer_js(token: str) -> str:
-    """Build JavaScript that exposes the bearer token on the page context."""
+    """Build JavaScript that exposes the bearer token on the page context.
+
+    SECURITY NOTE: This stores the bearer token in ``globalThis`` where any
+    script running on the page (including browser extensions) could read it.
+    This is acceptable because the token is already present in every network
+    request the Twitter web app makes, but be aware of this if you have
+    untrusted extensions installed.
+    """
     return "globalThis.__OPEN_SOURCE_BEARER = " + json.dumps(f"Bearer {token}") + "; 'ok';"
 
 
