@@ -92,6 +92,8 @@ It is intentionally sanitized:
    ```bash
    git clone https://github.com/x342344-bot/twitter-timeline-digest.git
    cd twitter-timeline-digest
+   python3 -m venv venv
+   source venv/bin/activate   # Windows: venv\Scripts\activate
    pip install -r requirements.txt
    cp config.example.yaml config.yaml
    ```
